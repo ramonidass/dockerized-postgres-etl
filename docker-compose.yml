@@ -1,0 +1,42 @@
+
+services:
+  db:
+    image: postgres:16
+    container_name: app_db
+    env_file:
+      - .env
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+
+    ports:
+      - "${HOST_PORT}:${POSTGRES_PORT}"
+    volumes:
+      # Persistent storage for database files
+      - db_data:/var/lib/postgresql/data
+
+      # Initialize database with custom scripts (SQL, sh, etc.)
+      # Files in this directory are executed alphabetically on first container start
+      - ./initdb:/docker-entrypoint-initdb.d
+
+
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s # Give Postgres time to start up before checking
+
+    restart: unless-stopped # Always restart unless explicitly stopped
+
+    networks:
+      - backend_network # Assign to a custom network for inter-service communication
+
+volumes:
+  db_data:
+    driver: local # Use the local driver for named volumes
+
+networks:
+  backend_network:
+    driver: bridge # Use the default bridge driver for custom networks
