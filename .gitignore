@@ -102,6 +102,7 @@ __pycache__/
 *.egg-info/
 .pytest_cache/
 .mypy_cache/
+.python-version
 
 # Node.js
 node_modules/

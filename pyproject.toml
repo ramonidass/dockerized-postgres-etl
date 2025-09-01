@@ -1,0 +1,14 @@
+[project]
+name = "dockerized-postgres-etl"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "asyncio>=4.0.0",
+    "httpx>=0.28.1",
+    "httpx-retry>=2025.4.23",
+    "pydantic-settings>=2.10.1",
+    "ruff>=0.12.12",
+    "urllib3>=2.5.0",
+]
